@@ -1,0 +1,4 @@
+(library
+ (name dpkg_types)
+ (public_name libdpkg.bindings.types)
+ (libraries ctypes.stubs ctypes))

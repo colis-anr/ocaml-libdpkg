@@ -1,0 +1,13 @@
+(executable
+ (name types_stubsgen)
+ (libraries libdpkg.bindings.types ctypes.stubs ctypes))
+
+(rule
+ (targets ml_types_stubsgen.c)
+ (deps ./types_stubsgen.exe)
+ (action (with-stdout-to %{targets} (run %{deps}))))
+
+(rule
+ (targets ml_types_stubsgen.exe)
+ (deps ./ml_types_stubsgen.c)
+ (action (bash "%{cc} %{deps} -I `dirname %{lib:ctypes:cstubs_internals.h}` -I %{ocaml_where} -o %{targets}")))

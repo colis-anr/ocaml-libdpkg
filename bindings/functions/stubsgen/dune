@@ -1,0 +1,3 @@
+(executable
+ (name stubsgen)
+ (libraries libdpkg.bindings.functions ctypes.stubs ctypes))

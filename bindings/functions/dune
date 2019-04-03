@@ -1,0 +1,12 @@
+(rule
+ (targets dpkg_types_stubs.ml)
+ (deps ../types/stubsgen/ml_types_stubsgen.exe)
+ (action (with-stdout-to %{targets} (run %{deps}))))
+
+(library
+ (name dpkg_functions)
+ (public_name libdpkg.bindings.functions)
+ (libraries libdpkg.bindings.types ctypes.stubs ctypes)
+ (flags :standard -w -9)
+ (c_library_flags :standard -ldpkg)
+ (no_dynlink))

@@ -1,0 +1,17 @@
+(rule
+ (targets dpkg_functions_stubs.ml)
+ (deps functions/stubsgen/stubsgen.exe)
+ (action (with-stdout-to %{targets} (run %{deps} --ml))))
+
+(rule
+ (targets dpkg_functions_stubs.c)
+ (deps functions/stubsgen/stubsgen.exe)
+ (action (with-stdout-to %{targets} (run %{deps} --c))))
+
+(library
+ (name dpkg_bindings)
+ (public_name libdpkg.bindings)
+ (libraries libdpkg.bindings.functions ctypes.stubs ctypes)
+ (c_names dpkg_functions_stubs)
+ (c_library_flags :standard -ldpkg)
+ (no_dynlink))
