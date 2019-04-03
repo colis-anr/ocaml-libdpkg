@@ -18,6 +18,7 @@ module M (T : Ctypes.TYPE) = struct
   type dpkg_error
   let dpkg_error : dpkg_error structure typ = structure "dpkg_error"
   let type_ = field dpkg_error "type" dpkg_msg_type
+  let str   = field dpkg_error "str" string
   let () = seal dpkg_error
 
   type dpkg_version

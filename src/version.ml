@@ -3,16 +3,16 @@ open Dpkg_bindings
 
 type t = dpkg_version structure ptr
 
-let make_dpkg_version_ptr () =
-  allocate dpkg_version (make dpkg_version)
+let make_ptr type_ =
+  allocate type_ (make type_)
 
 let blank () =
-  let dpkg_version_ptr = make_dpkg_version_ptr () in
+  let dpkg_version_ptr = make_ptr dpkg_version () in
   dpkg_version_blank dpkg_version_ptr;
   dpkg_version_ptr
 
 let is_informative = dpkg_version_is_informative
-    
+
 let compare = dpkg_version_compare
 
 type relation = Eq | Lt | Le | Gt | Ge
@@ -27,11 +27,17 @@ let relate v1 rel v2 =
     | Ge -> DPKG_RELATION_GE
   in
   dpkg_version_relate v1 dpkg_rel v2
-                
+
 let parse str =
-  let dpkg_version_ptr = make_dpkg_version_ptr () in
-  let ret = parseversion dpkg_version_ptr str (allocate dpkg_error (make dpkg_error)) in
-  if ret = 0 then
-    Some dpkg_version_ptr
-  else
-    None
+  let version = make_ptr dpkg_version () in
+  let error = make_ptr dpkg_error () in
+  let ret = parseversion version str error in
+  match ret, getf (!@ error) Dpkg_bindings.type_ with
+  | 0, _ ->
+    (version, None)
+  | _, DPKG_MSG_WARN ->
+    (version, Some (getf (!@ error) Dpkg_bindings.str))
+  | _, DPKG_MSG_ERROR ->
+    raise (Error.Error (getf (!@ error) str))
+  | _ ->
+    assert false
