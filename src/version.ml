@@ -7,7 +7,7 @@ let make_ptr type_ =
   allocate type_ (make type_)
 
 let blank () =
-  let dpkg_version_ptr = make_ptr dpkg_version () in
+  let dpkg_version_ptr = make_ptr dpkg_version in
   dpkg_version_blank dpkg_version_ptr;
   dpkg_version_ptr
 
@@ -29,8 +29,8 @@ let relate v1 rel v2 =
   dpkg_version_relate v1 dpkg_rel v2
 
 let parse str =
-  let version = make_ptr dpkg_version () in
-  let error = make_ptr dpkg_error () in
+  let version = make_ptr dpkg_version in
+  let error = make_ptr dpkg_error in
   let ret = parseversion version str error in
   match ret, getf (!@ error) Dpkg_bindings.type_ with
   | 0, _ ->
@@ -38,6 +38,6 @@ let parse str =
   | _, DPKG_MSG_WARN ->
     (version, Some (getf (!@ error) Dpkg_bindings.str))
   | _, DPKG_MSG_ERROR ->
-    raise (Error.Error (getf (!@ error) str))
+    raise (Error.Error (getf (!@ error) Dpkg_bindings.str))
   | _ ->
     assert false
