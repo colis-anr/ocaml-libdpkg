@@ -16,7 +16,7 @@ homepage: "https://github.com/colis-anr/ocaml-libdpkg"
 bug-reports: "https://github.com/colis-anr/ocaml-libdpkg/issues"
 dev-repo: "git+ssh://git@github.com/colis-anr/ocaml-libdpkg.git"
 
-available: [ "os-family" = "debian" ]
+available: [ os-family = "debian" ]
 depends: [
   "ctypes"
   "ctypes-foreign"
