@@ -20,7 +20,7 @@ available: [ os-family = "debian" ]
 depends: [
   "ctypes"
   "ctypes-foreign"
-  "dune"            {build}
+  "dune"            {build & >= "1.1"}
   "ocaml"           {>= "4.04"}
 ]
 
